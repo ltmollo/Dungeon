@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.GameController"
+            fx:id="backgroundVBox"
+            stylesheets="styles/style.css"
+            styleClass="moveGrid"
+            prefHeight="400.0" prefWidth="600.0">
+
+        <GridPane
+                prefHeight="400.0" prefWidth="600.0"
+                styleClass="grid-pane"
+                >
+                <Button styleClass="moveBtn" onAction="#move" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Button styleClass="moveBtn, rightBtn" fx:id="rightBtn" onAction="#rotate" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <Button styleClass="moveBtn, downBtn" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Button styleClass="moveBtn, leftBtn" fx:id="leftBtn" onAction="#rotate" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        </GridPane>
+</VBox>

@@ -1,0 +1,40 @@
+.moveBtn {
+    -fx-background-image: url('../images/upArrow.png');
+    -fx-pref-width: 80px;
+    -fx-pref-height: 80px;
+    -fx-background-size: cover; /* dostosuj, aby obraz pokrywał całe tło przycisku */
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center; /* ustawia obraz na środku przycisku */
+    -fx-border-width: 0;
+    -fx-opacity: 70%;
+
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0.40em 0.60em 0.40em 0.60em; /* Adjust padding as needed */
+    -fx-text-fill: -fx-text-base-color;
+}
+
+.rightBtn{
+    -fx-rotate: 90deg;
+}
+
+.downBtn{
+    -fx-rotate: 180deg;
+}
+
+.leftBtn{
+    -fx-rotate: -90deg;
+}
+
+.moveGrid{
+    -fx-padding: 450px 0px 0 650px;
+    -fx-background-image: url('../images/N00-doors.png');
+    -fx-background-size: cover;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center center;
+}
+
+.grid-pane{
+    -fx-background-color: red;
+}
