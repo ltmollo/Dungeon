@@ -49,9 +49,8 @@ public class MenuController {
     private DungeonApp dungeonApp;
 
     @FXML
-    protected void increase(ActionEvent event)
-    {
-        if (pointsRemaining == 0){
+    protected void increase(ActionEvent event) {
+        if (pointsRemaining == 0) {
             informationLabel.setText("You don't have more points to give");
             return;
         }
@@ -59,13 +58,13 @@ public class MenuController {
         Object source = event.getSource();
         Button clickedButton = (Button) source;
         String buttonId = clickedButton.getId();
-        switch (buttonId){
+        switch (buttonId) {
             case ("increaseStrengthBtn"):
                 strengthInt++;
 
                 strengthLabel.setText("Strength " + strengthInt);
                 decreaseStrengthBtn.setDisable(false);
-                if (strengthInt == 15){
+                if (strengthInt == 15) {
                     increaseStrengthBtn.setDisable(true);
                 }
                 break;
@@ -83,7 +82,7 @@ public class MenuController {
 
                 luckLabel.setText("Luck " + luckInt);
                 decreaseLuckBtn.setDisable(false);
-                if (luckInt == 15){
+                if (luckInt == 15) {
                     increaseLuckBtn.setDisable(true);
                 }
                 break;
@@ -92,7 +91,7 @@ public class MenuController {
 
                 armorLabel.setText("Armor " + armorInt);
                 decreaseArmorBtn.setDisable(false);
-                if (armorInt == 15){
+                if (armorInt == 15) {
                     increaseArmorBtn.setDisable(true);
                 }
                 break;
@@ -102,9 +101,8 @@ public class MenuController {
     }
 
     @FXML
-    protected void decrease(ActionEvent event)
-    {
-        if (pointsRemaining == 10){
+    protected void decrease(ActionEvent event) {
+        if (pointsRemaining == 10) {
             informationLabel.setText("You can't deny more points");
             return;
         }
@@ -127,7 +125,7 @@ public class MenuController {
                 agilityLabel.setText("Agility " + agilityInt);
                 increaseAgilityBtn.setDisable(false);
                 if (agilityInt == 10) {
-                   decreaseAgilityBtn.setDisable(true);
+                    decreaseAgilityBtn.setDisable(true);
                 }
                 break;
 
@@ -153,12 +151,12 @@ public class MenuController {
         informationLabel.setText("Points to spend " + pointsRemaining);
     }
 
-    public void setModel(DungeonApp dungeonApp){
+    public void setModel(DungeonApp dungeonApp) {
         this.dungeonApp = dungeonApp;
     }
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
     }
 

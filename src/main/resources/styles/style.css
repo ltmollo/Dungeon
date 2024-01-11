@@ -27,15 +27,14 @@
     -fx-rotate: -90deg;
 }
 
-.moveGrid{
-    -fx-padding: 450px 0px 0 650px;
-    -fx-background-image: url('../images/N00-doors.png');
-    -fx-background-size: 900 700;
-    -fx-background-repeat: no-repeat;
-    -fx-background-position: center center;
+.mapRectangle {
+    -fx-stroke: yellow;          /* Ustaw kolor obramowania na czarny */
+    -fx-stroke-width: 1;        /* Ustaw grubość obramowania */
 }
-
-.grid-pane{
+.mapGrid{
+    -fx-background-color: black;
+    -fx-opacity: 80%;
+    -fx-background-radius: 10%;
 }
 
 .information{

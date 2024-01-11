@@ -5,6 +5,7 @@ import controllers.MenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import maps.Map;
@@ -38,15 +39,22 @@ public class DungeonApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(DungeonApp.class.getClassLoader().getResource("views/game.fxml"));
 
-            VBox rootLayout = loader.load();
+            AnchorPane rootLayout = loader.load();
             GameController gameController = loader.getController();
             gameController.setModel(player, new Map());
 
-            configureStage(rootLayout);
+            configureStage2(rootLayout);
 
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    private void configureStage2(AnchorPane rootLayout) {
+        Scene scene = new Scene(rootLayout, 900, 700);
+
+        this.stage.setScene(scene);
+        this.stage.setTitle("Dungeon");
     }
 
 

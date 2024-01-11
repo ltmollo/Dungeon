@@ -6,22 +6,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.GameController"
-            fx:id="backgroundVBox"
-            stylesheets="styles/style.css"
-            styleClass="moveGrid"
-            prefHeight="400.0" prefWidth="600.0">
+<?import javafx.scene.shape.Rectangle?>
+<AnchorPane
+        xmlns="http://javafx.com/javafx"
+        xmlns:fx="http://javafx.com/fxml"
+        fx:controller="controllers.GameController"
+        fx:id="backgroundPane"
+        stylesheets="styles/style.css"
+        styleClass="backgroundPane"
 
+        prefHeight="400.0" prefWidth="600.0">
+
+
+
+        <AnchorPane
+                styleClass="mapGrid"
+                fx:id="mapPane"
+                prefHeight="200.0" prefWidth="130.0">
+        </AnchorPane>
         <Label text="Luck 10" fx:id="positionLabel" styleClass="information"/>
         <GridPane
-                prefHeight="400.0" prefWidth="600.0"
-                styleClass="grid-pane"
+                fx:id="moveGrid"
                 >
                 <Button styleClass="moveBtn" onAction="#move" fx:id="upBtn" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
                 <Button styleClass="moveBtn, rightBtn" fx:id="rightBtn" onAction="#rotate" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <Button styleClass="moveBtn, downBtn" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
                 <Button styleClass="moveBtn, leftBtn" fx:id="leftBtn" onAction="#rotate" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         </GridPane>
-</VBox>
+</AnchorPane>
