@@ -79,6 +79,25 @@ public class Map {
         }
     }
 
+    public Vector2D[] neighboursRooms(Vector2D position){
+        int[] neighbours = checkDoorsInRoom(position);
+        Vector2D[] neighboursTable = new Vector2D[4];
+
+        if(neighbours[0] == 1){
+            neighboursTable[0] = new Vector2D(position.x, position.y+1);
+        }
+        if(neighbours[1] == 1){
+            neighboursTable[1] = new Vector2D(position.x+1, position.y);
+        }
+        if(neighbours[2] == 1){
+            neighboursTable[2] = new Vector2D(position.x, position.y-1);
+        }
+        if(neighbours[3] == 1){
+            neighboursTable[3] = new Vector2D(position.x-1, position.y);
+        }
+        return neighboursTable;
+    }
+
     public int[] checkDoorsInRoom(Vector2D position) {
         int x = position.x;
         int y = position.y;

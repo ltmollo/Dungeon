@@ -109,7 +109,6 @@ public class GameController {
         }
 
         return newUrl;
-
     }
 
     @FXML
@@ -135,26 +134,36 @@ public class GameController {
                 newDirection = null;
         }
         imgAfterRotation = checkDoors(newDirection, player.getPosition());
-        setRotation();
 
+        setDirectionOnMap();
         setBackgroundImg(imgAfterRotation);
     }
 
 
-    private void addRectangleToMap(Vector2D beginPosition) {
+    private void addRectangleToMap(Vector2D position) {
         double width = 15;
         double height = 15;
 
         Rectangle rectangle = new Rectangle(width, height, Color.WHITE);
         rectangle.getStyleClass().add("mapRectangle");
 
-        encounteredRooms.put(beginPosition, rectangle);
+        encounteredRooms.put(position, rectangle);
         mapPane.getChildren().add(rectangle);
-        setRotation();
 
-        AnchorPane.setBottomAnchor(rectangle, 2 * height + beginPosition.y * height);
-        AnchorPane.setLeftAnchor(rectangle, 2 * width + beginPosition.x * width);
+        AnchorPane.setBottomAnchor(rectangle, 2 * height + position.y * height);
+        AnchorPane.setLeftAnchor(rectangle, 2 * width + position.x * width);
 
+        setDirectionOnMap();
+    }
+
+    private void addNeighboursOnTheMap(Vector2D position) {
+        Vector2D[] neighboursTable = map.neighboursRooms(position);
+        for (Vector2D neighbourPosition : neighboursTable) {
+            if (neighbourPosition == null || encounteredRooms.containsKey(neighbourPosition)) {
+                continue;
+            }
+            addRectangleToMap(neighbourPosition);
+        }
     }
 
     private void updateMap(Vector2D oldPosition, Vector2D newPosition) {
@@ -164,14 +173,15 @@ public class GameController {
         if (encounteredRooms.containsKey(newPosition)) {
             Rectangle oldRectangle = encounteredRooms.get(newPosition);
             oldRectangle.setFill(Color.WHITE);
-            setRotation();
+            setDirectionOnMap();
 
         } else {
             addRectangleToMap(newPosition);
         }
+        addNeighboursOnTheMap(newPosition);
     }
 
-    private void setRotation() {
+    private void setDirectionOnMap() {
         Rectangle rectangle = encounteredRooms.get(player.getPosition());
         String imagePath = "images/^" + player.getDirection().ordinal() + ".png";
         Image backgroundImage = new Image(imagePath);
@@ -190,7 +200,9 @@ public class GameController {
 
         AnchorPane.setTopAnchor(mapPane, 20.0);
         AnchorPane.setLeftAnchor(mapPane, 20.0);
+
         addRectangleToMap(player.getPosition());
+        addNeighboursOnTheMap(player.getPosition());
     }
 
 }
