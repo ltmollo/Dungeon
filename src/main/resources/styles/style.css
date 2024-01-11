@@ -30,11 +30,15 @@
 .moveGrid{
     -fx-padding: 450px 0px 0 650px;
     -fx-background-image: url('../images/N00-doors.png');
-    -fx-background-size: cover;
+    -fx-background-size: 900 700;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
 }
 
 .grid-pane{
-    -fx-background-color: red;
+}
+
+.information{
+    -fx-font-scale: 22;
+    -fx-background-color: white;
 }

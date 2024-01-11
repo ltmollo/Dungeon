@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import maps.Map;
@@ -22,6 +23,10 @@ public class GameController {
     Button rightBtn;
     @FXML
     Button leftBtn;
+    @FXML
+    Label positionLabel;
+    @FXML
+    Button upBtn;
 
     private Map map;
     private Player player;
@@ -29,18 +34,23 @@ public class GameController {
     private void setBackgroundVBox(String imagePath){
         Image image = new Image(imagePath);
 
-        // Tworzenie obiektu BackgroundImage
+        double preferredWidth = 900;
+        double preferredHeight = 700;
+
+        BackgroundSize backgroundSize = new BackgroundSize(preferredWidth, preferredHeight, false, false, false, false);
+
         BackgroundImage backgroundImage = new BackgroundImage(
                 image,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundPosition.DEFAULT,
-                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true)
+                backgroundSize
         );
 
         Background background = new Background(backgroundImage);
 
         backgroundVBox.setBackground(background);
+        System.out.println("Ustawiono: " + imagePath);
     }
 
     @FXML
@@ -63,6 +73,11 @@ public class GameController {
         String imgAfterMove = checkDoors(currentDirection, newPosition);
 
         setBackgroundVBox(imgAfterMove);
+
+        System.out.println(imgAfterMove);
+
+        positionLabel.setText(newPosition.toString()+ " " + currentDirection);
+
     }
 
     private String checkDoors(Direction direction, Vector2D position){
@@ -71,14 +86,22 @@ public class GameController {
 
         int[] result = map.checkDoorsInRoom(position);
 
-        if (direction == Direction.NORTH || direction == Direction.SOUTH){
+        if (direction == Direction.NORTH){
             newUrl += result[Direction.EAST.ordinal()];
             newUrl += result[Direction.WEST.ordinal()];
+        } else if (direction == Direction.SOUTH){
+            newUrl += result[Direction.WEST.ordinal()];
+            newUrl += result[Direction.EAST.ordinal()];
         }
+
         if (result[direction.ordinal()] == 1){
             newUrl += "-doors.png";
+            upBtn.setDisable(false);
+            upBtn.setVisible(true);
         }else{
             newUrl += "-noDoors.png";
+            upBtn.setDisable(true);
+            upBtn.setVisible(false);
         }
 
         return newUrl;
