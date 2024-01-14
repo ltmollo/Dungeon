@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import maps.Map;
+import maps.SpecialElement;
 import players.Player;
 import vectors.Direction;
 import vectors.Vector2D;
@@ -34,6 +35,8 @@ public class GameController {
     GridPane moveGrid;
     @FXML
     AnchorPane mapPane;
+
+    Rectangle specialRectangle;
 
     HashMap<Vector2D, Rectangle> encounteredRooms = new HashMap<>();
 
@@ -122,17 +125,17 @@ public class GameController {
         String imgAfterRotation;
 
         switch (buttonId) {
-            case ("rightBtn"):
+            case ("rightBtn") -> {
                 newDirection = player.getDirection().rotateClockwise();
                 player.changeDirection(newDirection);
-                break;
-            case ("leftBtn"):
+            }
+            case ("leftBtn") -> {
                 newDirection = player.getDirection().rotateCounterClockwise();
                 player.changeDirection(newDirection);
-                break;
-            default:
-                newDirection = null;
+            }
+            default -> newDirection = null;
         }
+        assert newDirection != null;
         imgAfterRotation = checkDoors(newDirection, player.getPosition());
 
         setDirectionOnMap();
@@ -179,14 +182,74 @@ public class GameController {
             addRectangleToMap(newPosition);
         }
         addNeighboursOnTheMap(newPosition);
+
+        SpecialElement specialElement = map.checkRoom(newPosition);
+        addSpecialElement(newPosition, specialElement);
+    }
+
+    private void addSpecialElement(Vector2D position, SpecialElement specialElement){
+        String imagePath;
+        int width = 200;
+        int height = 200;
+
+        if( specialElement == null) {
+            specialRectangle.setVisible(false);
+            return;
+        }
+        switch (specialElement) {
+            case MONSTER -> {
+                imagePath = "images/monster.png";
+                width = 400;
+                height = 400;
+            }
+
+            case KEY -> {
+                    imagePath = "images/key.png";
+                    width = 500;
+            }
+            case SWORD -> {
+                imagePath = "images/sword.png";
+                height = 500;
+            }
+
+            case HELMET -> imagePath = "images/helmet.png";
+
+            case TREASURE -> imagePath = "images/chest.png";
+
+            case ARMOR -> imagePath = "images/armor.png";
+
+            default -> imagePath = null;
+        }
+        if (imagePath == null ) {
+            return;
+        }
+        specialRectangle.setVisible(true);
+        specialRectangle.setWidth(width);
+        specialRectangle.setHeight(height);
+
+        AnchorPane.setTopAnchor(specialRectangle, (backgroundPane.getHeight() - specialRectangle.getHeight()) / 2);
+        AnchorPane.setLeftAnchor(specialRectangle, (backgroundPane.getWidth() - specialRectangle.getWidth()) / 2);
+
+        setRectangleImage(specialRectangle, imagePath);
+    }
+
+    private void setRectangleImage(Rectangle rectangle, String imagePath){
+        Image backgroundImage = new Image(imagePath);
+        ImagePattern img = new ImagePattern(backgroundImage);
+        rectangle.setFill(img);
     }
 
     private void setDirectionOnMap() {
         Rectangle rectangle = encounteredRooms.get(player.getPosition());
         String imagePath = "images/^" + player.getDirection().ordinal() + ".png";
-        Image backgroundImage = new Image(imagePath);
-        ImagePattern img = new ImagePattern(backgroundImage);
-        rectangle.setFill(img);
+        setRectangleImage(rectangle, imagePath);
+    }
+
+    private void initializeSpecialRectangle(){
+        this.specialRectangle = new Rectangle(100, 100);
+        this.specialRectangle.getStyleClass().add("specialRectangle");
+        this.specialRectangle.setVisible(false);
+        backgroundPane.getChildren().add(specialRectangle);
     }
 
 
@@ -203,6 +266,8 @@ public class GameController {
 
         addRectangleToMap(player.getPosition());
         addNeighboursOnTheMap(player.getPosition());
-    }
 
+        initializeSpecialRectangle();
+
+    }
 }

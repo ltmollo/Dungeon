@@ -3,9 +3,13 @@ package maps;
 import vectors.Direction;
 import vectors.Vector2D;
 
+import java.util.HashMap;
+
 public class Map {
     private final int MAX_X = 4 + 1;
     public final int MAX_y = 10 + 1;
+
+    private final HashMap<Vector2D, SpecialElement> specialRooms;
 
     int[][] northDoors = new int[MAX_X][MAX_y];
     int[][] eastDoors = new int[MAX_X][MAX_y];
@@ -17,6 +21,8 @@ public class Map {
         initializeEastMap();
         initializeSouthMap();
         initializeWestMap();
+        specialRooms = new HashMap<>();
+        initializeSpecialRooms();
     }
 
     private void initializeNorthMap() {
@@ -111,4 +117,21 @@ public class Map {
         return positions;
     }
 
+    public void initializeSpecialRooms(){
+        specialRooms.put(new Vector2D(0, 1), SpecialElement.ARMOR);
+        specialRooms.put(new Vector2D(0,2), SpecialElement.SWORD);
+        specialRooms.put(new Vector2D(0, 3), SpecialElement.MONSTER);
+        specialRooms.put(new Vector2D(0, 4), SpecialElement.HELMET);
+        specialRooms.put(new Vector2D(2, 2), SpecialElement.TREASURE);
+        specialRooms.put(new Vector2D(2, 4), SpecialElement.MONSTER);
+        specialRooms.put(new Vector2D(2, 5), SpecialElement.KEY);
+        specialRooms.put(new Vector2D(1, 7), SpecialElement.MONSTER);
+        specialRooms.put(new Vector2D(1, 10), SpecialElement.MONSTER);
+    }
+
+    public SpecialElement checkRoom(Vector2D position) {
+        if (specialRooms.containsKey(position)) {
+            return specialRooms.get(position);
+        } return null;
+    }
 }
