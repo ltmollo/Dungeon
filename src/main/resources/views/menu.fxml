@@ -9,48 +9,50 @@
 <VBox alignment="CENTER"
       spacing="20.0"
       xmlns:fx="http://javafx.com/fxml"
+      stylesheets="styles/styleMenu.css"
+      styleClass="background"
       fx:controller="controllers.MenuController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
-    <Label text="Points to spend 10" fx:id="informationLabel"/>
+    <Label text="Points to spend 10" fx:id="informationLabel" styleClass="ability"/>
 
     <HBox spacing="10"
           xmlns="http://javafx.com/javafx"
           alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml">
-        <Button text="-" fx:id="decreaseStrengthBtn" onAction="#decrease" disable="true"/>
-        <Label text="Strength 10" fx:id="strengthLabel"/>
-        <Button text="+" fx:id="increaseStrengthBtn" onAction="#increase"/>
+        <Button text="-" fx:id="decreaseStrengthBtn" onAction="#decrease" disable="true" styleClass="buttonMenu"/>
+        <Label text="Strength 10" fx:id="strengthLabel" styleClass="ability"/>
+        <Button text="+" fx:id="increaseStrengthBtn" onAction="#increase" styleClass="buttonMenu"/>
     </HBox>
 
     <HBox spacing="10"
           xmlns="http://javafx.com/javafx"
           alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml">
-        <Button text="-" fx:id="decreaseAgilityBtn" onAction="#decrease" disable="true"/>
-        <Label text="Agility 10" fx:id="agilityLabel"/>
-        <Button text="+" fx:id="increaseAgilityBtn" onAction="#increase"/>
+        <Button text="-" fx:id="decreaseAgilityBtn" onAction="#decrease" disable="true" styleClass="buttonMenu"/>
+        <Label text="Agility 10" fx:id="agilityLabel" styleClass="ability"/>
+        <Button text="+" fx:id="increaseAgilityBtn" onAction="#increase" styleClass="buttonMenu"/>
     </HBox>
 
     <HBox spacing="10"
           xmlns="http://javafx.com/javafx"
           alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml">
-        <Button text="-" fx:id="decreaseArmorBtn" onAction="#decrease" disable="true"/>
-        <Label text="Armor 10" fx:id="armorLabel"/>
-        <Button text="+" fx:id="increaseArmorBtn" onAction="#increase"/>
+        <Button text="-" fx:id="decreaseArmorBtn" onAction="#decrease" disable="true" styleClass="buttonMenu"/>
+        <Label text="Armor 10" fx:id="armorLabel" styleClass="ability"/>
+        <Button text="+" fx:id="increaseArmorBtn" onAction="#increase" styleClass="buttonMenu"/>
     </HBox>
 
     <HBox spacing="10"
           xmlns="http://javafx.com/javafx"
           alignment="CENTER"
           xmlns:fx="http://javafx.com/fxml">
-        <Button text="-" fx:id="decreaseLuckBtn" onAction="#decrease" disable="true"/>
-        <Label text="Luck 10" fx:id="luckLabel"/>
-        <Button text="+" fx:id="increaseLuckBtn" onAction="#increase"/>
+        <Button text="-" fx:id="decreaseLuckBtn" onAction="#decrease" disable="true" styleClass="buttonMenu"/>
+        <Label text="Luck 10" fx:id="luckLabel" styleClass="ability"/>
+        <Button text="+" fx:id="increaseLuckBtn" onAction="#increase" styleClass="buttonMenu"/>
     </HBox>
 
-    <Button text="Submit" fx:id="submitBtn" onAction="#submit"/>
+    <Button text="Submit" fx:id="submitBtn" onAction="#submit" styleClass="buttonMenu"/>
 
 </VBox>

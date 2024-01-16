@@ -10,8 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import maps.Map;
-import maps.SpecialElement;
+import players.Ability;
 import players.Player;
+import specialItems.SpecialItem;
 import vectors.Direction;
 import vectors.Vector2D;
 
@@ -27,7 +28,17 @@ public class GameController {
     Button leftBtn;
 
     @FXML
-    Label positionLabel;
+    Label strengthLabel;
+    @FXML
+    Label agilityLabel;
+    @FXML
+    Label armorLabel;
+    @FXML
+    Label luckLabel;
+    @FXML
+    Label experienceLabel;
+    @FXML
+    Label healthLabel;
 
     @FXML
     AnchorPane backgroundPane;
@@ -35,10 +46,13 @@ public class GameController {
     GridPane moveGrid;
     @FXML
     AnchorPane mapPane;
+    @FXML
+    AnchorPane informationPane;
 
     Rectangle specialRectangle;
-
+    HashMap<Ability, Label> abilities = new HashMap<>();
     HashMap<Vector2D, Rectangle> encounteredRooms = new HashMap<>();
+    Button takeBtn;
 
     private Map map;
     private Player player;
@@ -73,7 +87,7 @@ public class GameController {
             case EAST -> newPosition = new Vector2D(currentPosition.x + 1, currentPosition.y);
             case SOUTH -> newPosition = new Vector2D(currentPosition.x, currentPosition.y - 1);
             case WEST -> newPosition = new Vector2D(currentPosition.x - 1, currentPosition.y);
-            default -> newPosition = null;
+            default -> newPosition = currentPosition;
         }
 
         player.setPosition(newPosition);
@@ -82,7 +96,6 @@ public class GameController {
 
         setBackgroundImg(imgAfterMove);
 
-        positionLabel.setText(newPosition.toString() + " " + currentDirection);
         updateMap(currentPosition, newPosition);
 
     }
@@ -183,46 +196,22 @@ public class GameController {
         }
         addNeighboursOnTheMap(newPosition);
 
-        SpecialElement specialElement = map.checkRoom(newPosition);
-        addSpecialElement(newPosition, specialElement);
+        backgroundPane.getChildren().remove(takeBtn);
+        SpecialItem specialItem = map.checkRoom(newPosition);
+        addSpecialElement(newPosition, specialItem);
     }
 
-    private void addSpecialElement(Vector2D position, SpecialElement specialElement){
-        String imagePath;
-        int width = 200;
-        int height = 200;
-
-        if( specialElement == null) {
+    private void addSpecialElement(Vector2D position, SpecialItem specialItem) {
+        if (specialItem == null) {
             specialRectangle.setVisible(false);
             return;
         }
-        switch (specialElement) {
-            case MONSTER -> {
-                imagePath = "images/monster.png";
-                width = 400;
-                height = 400;
-            }
 
-            case KEY -> {
-                    imagePath = "images/key.png";
-                    width = 500;
-            }
-            case SWORD -> {
-                imagePath = "images/sword.png";
-                height = 500;
-            }
+        String imagePath = specialItem.getImagePath();
+        int width = specialItem.getWidth();
+        int height = specialItem.getHeight();
 
-            case HELMET -> imagePath = "images/helmet.png";
-
-            case TREASURE -> imagePath = "images/chest.png";
-
-            case ARMOR -> imagePath = "images/armor.png";
-
-            default -> imagePath = null;
-        }
-        if (imagePath == null ) {
-            return;
-        }
+        encounterItem(specialItem, position);
         specialRectangle.setVisible(true);
         specialRectangle.setWidth(width);
         specialRectangle.setHeight(height);
@@ -233,7 +222,7 @@ public class GameController {
         setRectangleImage(specialRectangle, imagePath);
     }
 
-    private void setRectangleImage(Rectangle rectangle, String imagePath){
+    private void setRectangleImage(Rectangle rectangle, String imagePath) {
         Image backgroundImage = new Image(imagePath);
         ImagePattern img = new ImagePattern(backgroundImage);
         rectangle.setFill(img);
@@ -245,13 +234,63 @@ public class GameController {
         setRectangleImage(rectangle, imagePath);
     }
 
-    private void initializeSpecialRectangle(){
+    private void initializeSpecialRectangle() {
         this.specialRectangle = new Rectangle(100, 100);
         this.specialRectangle.getStyleClass().add("specialRectangle");
         this.specialRectangle.setVisible(false);
         backgroundPane.getChildren().add(specialRectangle);
     }
 
+    private void initializePlayerDetails() {
+
+        abilities.put(Ability.HEALTH, healthLabel);
+        abilities.put(Ability.STRENGTH, strengthLabel);
+        abilities.put(Ability.ARMOR, armorLabel);
+        abilities.put(Ability.AGILITY, agilityLabel);
+        abilities.put(Ability.LUCK, luckLabel);
+        abilities.put(Ability.EXPERIENCE, experienceLabel);
+
+        updatePlayerDetails();
+    }
+
+    private void updatePlayerDetails() {
+        HashMap<Ability, Integer> playerDetails = player.getAbilities();
+
+        for (Ability ability : abilities.keySet()) {
+            Label label = abilities.get(ability);
+            label.setText(ability.getDisplayName() + ": " + playerDetails.get(ability));
+        }
+    }
+
+    private void encounterItem(SpecialItem specialItem, Vector2D position) {
+        backgroundPane.getChildren().add(takeBtn);
+
+        AnchorPane.setBottomAnchor(takeBtn, 40.0);
+        AnchorPane.setLeftAnchor(takeBtn, (backgroundPane.getWidth() - takeBtn.getWidth()) / 2);
+
+        takeBtn.setOnAction(e -> {
+            takeItem(specialItem, position);
+            backgroundPane.getChildren().remove(takeBtn);
+        });
+
+    }
+
+    private void takeItem(SpecialItem specialItem, Vector2D position) {
+
+        HashMap<Ability, Integer> rewards = specialItem.getRewards();
+        player.updateAbilities(rewards);
+        player.pickItem(specialItem);
+
+        updatePlayerDetails();
+        specialRectangle.setVisible(false);
+
+        map.deleteFromRoom(position);
+    }
+
+    private void initializeTakeBtn() {
+        takeBtn = new Button("Take");
+        takeBtn.getStyleClass().add("takeBtn");
+    }
 
     @FXML
     public void setModel(Player player, Map map) {
@@ -264,10 +303,14 @@ public class GameController {
         AnchorPane.setTopAnchor(mapPane, 20.0);
         AnchorPane.setLeftAnchor(mapPane, 20.0);
 
+        AnchorPane.setLeftAnchor(informationPane, 0.0);
+        AnchorPane.setBottomAnchor(informationPane, 0.0);
+
         addRectangleToMap(player.getPosition());
         addNeighboursOnTheMap(player.getPosition());
 
         initializeSpecialRectangle();
-
+        initializePlayerDetails();
+        initializeTakeBtn();
     }
 }

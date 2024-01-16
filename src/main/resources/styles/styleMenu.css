@@ -1,0 +1,17 @@
+.ability{
+    -fx-font-size: 22;
+    -fx-text-fill: white;
+    -fx-font-family: Jokerman;
+}
+
+.background{
+    -fx-background-color: black;
+}
+
+.buttonMenu{
+    -fx-font-family: Jokerman;
+    -fx-font-size: 15;
+    -fx-border-radius: 10%;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #808080);
+}

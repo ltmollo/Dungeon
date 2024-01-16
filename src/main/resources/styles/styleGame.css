@@ -34,16 +34,25 @@
 .mapGrid{
     -fx-background-color: black;
     -fx-opacity: 80%;
-    -fx-background-radius: 10%;
+    -fx-background-radius: 0 10% 10% 0;
 }
 
 .information{
-    -fx-font-scale: 22;
-    -fx-background-color: white;
+    -fx-font-size: 22;
+    -fx-text-fill: white;
+    -fx-font-family: Jokerman;
 }
 
 .specialRectangle {
     -fx-background-size: cover;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center center;
+}
+
+.takeBtn{
+    -fx-font-family: Jokerman;
+    -fx-font-size: 22;
+    -fx-border-radius: 10%;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #808080);
 }

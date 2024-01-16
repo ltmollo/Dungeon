@@ -11,7 +11,7 @@
         xmlns:fx="http://javafx.com/fxml"
         fx:controller="controllers.GameController"
         fx:id="backgroundPane"
-        stylesheets="styles/style.css"
+        stylesheets="styles/styleGame.css"
         styleClass="backgroundPane"
 
         prefHeight="400.0" prefWidth="600.0">
@@ -21,7 +21,27 @@
                 fx:id="mapPane"
                 prefHeight="200.0" prefWidth="130.0">
         </AnchorPane>
-        <Label text="Luck 10" fx:id="positionLabel" styleClass="information"/>
+
+        <AnchorPane
+                styleClass="mapGrid"
+                fx:id="informationPane"
+                prefHeight="250.0" prefWidth="300.0">
+
+                <VBox
+                        alignment="CENTER"
+                        prefHeight="250.0" prefWidth="300.0">
+
+                        <Label text="Health 10" fx:id="healthLabel" styleClass="information"/>
+                        <Label text="Strength 10" fx:id="strengthLabel" styleClass="information"/>
+                        <Label text="Agility 10" fx:id="agilityLabel" styleClass="information"/>
+                        <Label text="Armor 10" fx:id="armorLabel" styleClass="information"/>
+                        <Label text="Luck 10" fx:id="luckLabel" styleClass="information"/>
+                        <Label text="Experience 10" fx:id="experienceLabel" styleClass="information"/>
+                </VBox>
+
+        </AnchorPane>
+
+
         <GridPane
                 fx:id="moveGrid"
                 >

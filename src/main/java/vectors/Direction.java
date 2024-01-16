@@ -25,6 +25,6 @@ public enum Direction {
     }
 
     public Direction opositeDirection() {
-        return values()[(ordinal() + 2 ) % values().length];
+        return values()[(ordinal() + 2) % values().length];
     }
 }

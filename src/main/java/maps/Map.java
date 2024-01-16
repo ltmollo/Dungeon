@@ -1,5 +1,6 @@
 package maps;
 
+import specialItems.*;
 import vectors.Direction;
 import vectors.Vector2D;
 
@@ -9,7 +10,7 @@ public class Map {
     private final int MAX_X = 4 + 1;
     public final int MAX_y = 10 + 1;
 
-    private final HashMap<Vector2D, SpecialElement> specialRooms;
+    private final HashMap<Vector2D, SpecialItem> specialRooms;
 
     int[][] northDoors = new int[MAX_X][MAX_y];
     int[][] eastDoors = new int[MAX_X][MAX_y];
@@ -85,21 +86,21 @@ public class Map {
         }
     }
 
-    public Vector2D[] neighboursRooms(Vector2D position){
+    public Vector2D[] neighboursRooms(Vector2D position) {
         int[] neighbours = checkDoorsInRoom(position);
         Vector2D[] neighboursTable = new Vector2D[4];
 
-        if(neighbours[0] == 1){
-            neighboursTable[0] = new Vector2D(position.x, position.y+1);
+        if (neighbours[0] == 1) {
+            neighboursTable[0] = new Vector2D(position.x, position.y + 1);
         }
-        if(neighbours[1] == 1){
-            neighboursTable[1] = new Vector2D(position.x+1, position.y);
+        if (neighbours[1] == 1) {
+            neighboursTable[1] = new Vector2D(position.x + 1, position.y);
         }
-        if(neighbours[2] == 1){
-            neighboursTable[2] = new Vector2D(position.x, position.y-1);
+        if (neighbours[2] == 1) {
+            neighboursTable[2] = new Vector2D(position.x, position.y - 1);
         }
-        if(neighbours[3] == 1){
-            neighboursTable[3] = new Vector2D(position.x-1, position.y);
+        if (neighbours[3] == 1) {
+            neighboursTable[3] = new Vector2D(position.x - 1, position.y);
         }
         return neighboursTable;
     }
@@ -117,21 +118,26 @@ public class Map {
         return positions;
     }
 
-    public void initializeSpecialRooms(){
-        specialRooms.put(new Vector2D(0, 1), SpecialElement.ARMOR);
-        specialRooms.put(new Vector2D(0,2), SpecialElement.SWORD);
-        specialRooms.put(new Vector2D(0, 3), SpecialElement.MONSTER);
-        specialRooms.put(new Vector2D(0, 4), SpecialElement.HELMET);
-        specialRooms.put(new Vector2D(2, 2), SpecialElement.TREASURE);
-        specialRooms.put(new Vector2D(2, 4), SpecialElement.MONSTER);
-        specialRooms.put(new Vector2D(2, 5), SpecialElement.KEY);
-        specialRooms.put(new Vector2D(1, 7), SpecialElement.MONSTER);
-        specialRooms.put(new Vector2D(1, 10), SpecialElement.MONSTER);
+    public void initializeSpecialRooms() {
+        specialRooms.put(new Vector2D(0, 1), new Armor());
+        specialRooms.put(new Vector2D(0, 2), new Sword());
+        specialRooms.put(new Vector2D(0, 3), new Monster());
+        specialRooms.put(new Vector2D(0, 4), new Helmet());
+        specialRooms.put(new Vector2D(2, 2), new Treasure());
+        specialRooms.put(new Vector2D(2, 4), new Monster());
+        specialRooms.put(new Vector2D(2, 5), new Key());
+        specialRooms.put(new Vector2D(1, 7), new Monster());
+        specialRooms.put(new Vector2D(1, 10), new Monster());
     }
 
-    public SpecialElement checkRoom(Vector2D position) {
+    public SpecialItem checkRoom(Vector2D position) {
         if (specialRooms.containsKey(position)) {
             return specialRooms.get(position);
-        } return null;
+        }
+        return null;
+    }
+
+    public void deleteFromRoom(Vector2D position) {
+        specialRooms.remove(position);
     }
 }
