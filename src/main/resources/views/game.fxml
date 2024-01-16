@@ -23,7 +23,7 @@
         </AnchorPane>
 
         <AnchorPane
-                styleClass="mapGrid"
+                styleClass="detailsGrid"
                 fx:id="informationPane"
                 prefHeight="250.0" prefWidth="300.0">
 
@@ -37,6 +37,13 @@
                         <Label text="Armor 10" fx:id="armorLabel" styleClass="information"/>
                         <Label text="Luck 10" fx:id="luckLabel" styleClass="information"/>
                         <Label text="Experience 10" fx:id="experienceLabel" styleClass="information"/>
+
+                        <HBox   fx:id="itemsBox"
+                                styleClass="itemsBox"
+                                alignment="CENTER"
+                                        >
+                                <Label text="Items: "  styleClass="information"/>
+                        </HBox>
                 </VBox>
 
         </AnchorPane>

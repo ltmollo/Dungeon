@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class Player {
     private int level;
-    private int room;
 
     private final HashMap<SpecialElement, SpecialItem> pickedItems;
     private final HashMap<Ability, Integer> abilities;
@@ -19,13 +18,13 @@ public class Player {
 
     public Player(int armor, int agility, int luck, int strength) {
         this.level = 0;
-        this.room = 0;
         int health = 100;
         int experience = 0;
         this.position = new Vector2D(0, 0);
 
         pickedItems = new HashMap<>();
         abilities = new HashMap<>();
+
         abilities.put(Ability.HEALTH, health);
         abilities.put(Ability.STRENGTH, strength);
         abilities.put(Ability.ARMOR, armor);
@@ -60,11 +59,38 @@ public class Player {
         }
     }
 
-    public void pickItem(SpecialItem specialItem){
+    public void pickItem(SpecialItem specialItem) {
         pickedItems.put(specialItem.getSpecialElement(), specialItem);
     }
 
-    public HashMap<SpecialElement, SpecialItem> getPickedItems(){
+    public void removeItem(SpecialItem specialItem) {
+        pickedItems.remove(specialItem);
+    }
+
+    public HashMap<SpecialElement, SpecialItem> getPickedItems() {
         return this.pickedItems;
+    }
+
+    public int strike() {
+        int strength = abilities.get(Ability.STRENGTH);
+        int agility = abilities.get(Ability.AGILITY);
+        int luck = abilities.get(Ability.LUCK);
+
+        double random = Math.random() * luck;
+
+        return (int) (strength + agility + random);
+    }
+
+    public int takeDamage(int hit) {
+        int damageTaken = hit - abilities.get(Ability.ARMOR);
+        int health = abilities.get(Ability.HEALTH);
+
+        abilities.put(Ability.HEALTH, health - damageTaken);
+
+        return hit;
+    }
+
+    public boolean isDead() {
+        return abilities.get(Ability.HEALTH) <= 0;
     }
 }

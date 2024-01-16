@@ -12,6 +12,8 @@ import javafx.scene.shape.Rectangle;
 import maps.Map;
 import players.Ability;
 import players.Player;
+import specialItems.Enemy;
+import specialItems.SpecialElement;
 import specialItems.SpecialItem;
 import vectors.Direction;
 import vectors.Vector2D;
@@ -49,10 +51,15 @@ public class GameController {
     @FXML
     AnchorPane informationPane;
 
+    @FXML
+    HBox itemsBox;
+
     Rectangle specialRectangle;
     HashMap<Ability, Label> abilities = new HashMap<>();
     HashMap<Vector2D, Rectangle> encounteredRooms = new HashMap<>();
     Button takeBtn;
+
+    Label informationLabel;
 
     private Map map;
     private Player player;
@@ -166,7 +173,7 @@ public class GameController {
         encounteredRooms.put(position, rectangle);
         mapPane.getChildren().add(rectangle);
 
-        AnchorPane.setBottomAnchor(rectangle, 2 * height + position.y * height);
+        AnchorPane.setBottomAnchor(rectangle, 1.25 * height + position.y * height);
         AnchorPane.setLeftAnchor(rectangle, 2 * width + position.x * width);
 
         setDirectionOnMap();
@@ -197,6 +204,8 @@ public class GameController {
         addNeighboursOnTheMap(newPosition);
 
         backgroundPane.getChildren().remove(takeBtn);
+        backgroundPane.getChildren().remove(informationLabel);
+
         SpecialItem specialItem = map.checkRoom(newPosition);
         addSpecialElement(newPosition, specialItem);
     }
@@ -263,20 +272,58 @@ public class GameController {
     }
 
     private void encounterItem(SpecialItem specialItem, Vector2D position) {
-        backgroundPane.getChildren().add(takeBtn);
-
-        AnchorPane.setBottomAnchor(takeBtn, 40.0);
-        AnchorPane.setLeftAnchor(takeBtn, (backgroundPane.getWidth() - takeBtn.getWidth()) / 2);
-
         takeBtn.setOnAction(e -> {
             takeItem(specialItem, position);
             backgroundPane.getChildren().remove(takeBtn);
         });
 
+        if (specialItem.getSpecialElement() == SpecialElement.TREASURE) {
+            if (!player.getPickedItems().containsKey(SpecialElement.KEY)) {
+                informationLabel.setText("You need a key\nto open a chest");
+                backgroundPane.getChildren().add(informationLabel);
+
+                AnchorPane.setLeftAnchor(informationLabel, (backgroundPane.getWidth() - informationLabel.getWidth()) / 2);
+                AnchorPane.setBottomAnchor(informationLabel, 20.0);
+                return;
+            } else {
+                takeBtn.setText("Open");
+            }
+        } else if (specialItem.getSpecialElement() == SpecialElement.MONSTER) {
+            takeBtn.setText("Fight");
+            takeBtn.setOnAction(e -> {
+                fight((Enemy) specialItem, position);
+                backgroundPane.getChildren().remove(takeBtn);
+            });
+        } else {
+            takeBtn.setText("Take");
+        }
+
+        backgroundPane.getChildren().add(takeBtn);
+
+        AnchorPane.setBottomAnchor(takeBtn, 40.0);
+        AnchorPane.setLeftAnchor(takeBtn, (backgroundPane.getWidth() - takeBtn.getWidth()) / 2);
+    }
+
+    private void fight(Enemy monster, Vector2D position) {
+        do {
+            int hitPlayer = player.strike();
+            int taken = monster.takeDamage(hitPlayer);
+            System.out.println(hitPlayer + " " + taken);
+            int hitMonster = monster.strike();
+            player.takeDamage(hitMonster);
+            updatePlayerDetails();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        } while (!player.isDead() && !monster.isDead());
+
+        specialRectangle.setVisible(false);
+        map.deleteFromRoom(position);
     }
 
     private void takeItem(SpecialItem specialItem, Vector2D position) {
-
         HashMap<Ability, Integer> rewards = specialItem.getRewards();
         player.updateAbilities(rewards);
         player.pickItem(specialItem);
@@ -285,11 +332,28 @@ public class GameController {
         specialRectangle.setVisible(false);
 
         map.deleteFromRoom(position);
+
+        if (specialItem.getSpecialElement() != SpecialElement.MONSTER) {
+            updateItemBox(specialItem);
+        }
     }
 
     private void initializeTakeBtn() {
         takeBtn = new Button("Take");
         takeBtn.getStyleClass().add("takeBtn");
+    }
+
+    private void initializeInformationLabel() {
+        informationLabel = new Label();
+        informationLabel.getStyleClass().add("information");
+    }
+
+    private void updateItemBox(SpecialItem specialItem) {
+        Rectangle rectangle = new Rectangle(25, 25);
+        rectangle.getStyleClass().add("itemPicked");
+        setRectangleImage(rectangle, specialItem.getImagePath());
+        itemsBox.getChildren().add(rectangle);
+
     }
 
     @FXML
@@ -312,5 +376,6 @@ public class GameController {
         initializeSpecialRectangle();
         initializePlayerDetails();
         initializeTakeBtn();
+        initializeInformationLabel();
     }
 }
